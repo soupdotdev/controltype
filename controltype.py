@@ -6,7 +6,7 @@ import pyautogui as ag
 
 # meow mrrp :3
 
-gamepadType = gp.Xbox360
+gamepadType = gp.XboxONE
 
 gamepad = gamepadType()
 
@@ -60,6 +60,17 @@ layout = {
 
 }
 
+binds = {
+
+    "START": "enter",
+    "SELECT": "backspace",
+    "A": "space",
+    "B": "escape",
+    "X": "del",
+    "Y": "tab",
+
+}
+
 ls = [0.0,0.0] #left stick
 rs = [0.0,0.0] #right stick
 lsangle = 0.0
@@ -69,12 +80,12 @@ rslength = 0.0
 lsanglefixed = 0.0
 rsanglefixed = 0.0
 
-charid = int(0)
-charname = str("")
-oldcharid = int(0)
+charid : int = 0
+charname: str = ""
+oldcharid : int = 0
 
-keypressed = bool(0)
-waspressed = bool(0)
+keypressed : bool = 0
+waspressed : bool = 0
 
 while gamepad.isConnected():
 
@@ -84,19 +95,19 @@ while gamepad.isConnected():
         #print(str(eventType)+', '+str(control)+', '+str(value))
     
     if eventType == "AXIS":
-        if control == "RIGHT-X":
+        if control == "RAS -X":
             rs[0] = value
             if abs(rs[0]) < 0.2:
                 rs[0] = 0
-        if control == "RIGHT-Y":
+        if control == "RAS -Y":
             rs[1] = value
             if abs(rs[1]) < 0.2:
                 rs[1] = 0
-        if control == "LEFT-X":
+        if control == "LAS -X":
             ls[0] = value
             if abs(ls[0]) < 0.2:
                 ls[0] = 0
-        if control == "LEFT-Y":
+        if control == "LAS -Y":
             ls[1] = value
             if abs(ls[1]) < 0.2:
                 ls[1] = 0
@@ -116,23 +127,27 @@ while gamepad.isConnected():
         if rsanglefixed == 6:
             rsanglefixed = 0
     
-    if rslength > lengthminimum:
-        charid = lsanglefixed * 6 + rsanglefixed
-        charname = layout[charid]
-        keypressed = 1
-    else:
-        keypressed = 0
+        if rslength > lengthminimum:
+            charid = lsanglefixed * 6 + rsanglefixed
+            charname = layout[charid]
+            keypressed = 1
+        else:
+            keypressed = 0
         #ag.keyUp(charname)
 
-    if keypressed:
-        if not waspressed:
-            ag.press(charname)
-        waspressed = 1
-    else:
-        waspressed = 0
+        if keypressed:
+            if not waspressed:
+                ag.press(charname)
+            waspressed = 1
+        else:
+            waspressed = 0
+
+    if eventType == "BUTTON" and value == True:
+        ag.press(binds[control])
+        
 
     #print(charid)
-    print(charname)
+    #print(charname)
     #print(lsangle,rsangle)
     #print(lslength,rslength)
     #print(lsanglefixed,rsanglefixed)
