@@ -2,6 +2,7 @@ import Gamepad as gp
 import time
 import math
 import numpy
+import pyautogui as ag
 
 # meow mrrp :3
 
@@ -20,36 +21,42 @@ layout = {
     3: "4",
     4: "5",
     5: "6",
-    6: "A",
-    7: "R",
-    8: "S",
-    9: "T",
-    10: "D",
-    11: "H",
-    12: "N",
-    13: "E",
-    14: "I",
-    15: "O",
-    16: "F",
-    17: "P",
-    18: "G",
-    19: "W",
-    20: "J",
-    21: "L",
-    22: "U",
-    23: "Y",
-    24: "K",
-    25: "M",
-    26: "B",
-    27: "Z",
-    28: "X",
-    29: "C",
-    30: "Q",
-    31: "V",
+    6: "a",
+    7: "r",
+    8: "s",
+    9: "t",
+    10: "d",
+    11: "h",
+    12: "n",
+    13: "e",
+    14: "i",
+    15: "o",
+    16: "f",
+    17: "p",
+    18: "g",
+    19: "w",
+    20: "j",
+    21: "l",
+    22: "u",
+    23: "y",
+    24: "k",
+    25: "m",
+    26: "b",
+    27: "z",
+    28: "x",
+    29: "c",
+    30: "q",
+    31: "v",
     32: "7",
     33: "8",
     34: "9",
     35: "0",
+    36: "/",
+    37: ",",
+    38: ".",
+    39: "\'",
+    40: ";",
+    41: "\\",
 
 }
 
@@ -64,6 +71,10 @@ rsanglefixed = 0.0
 
 charid = int(0)
 charname = str("")
+oldcharid = int(0)
+
+keypressed = bool(0)
+waspressed = bool(0)
 
 while gamepad.isConnected():
 
@@ -99,13 +110,26 @@ while gamepad.isConnected():
         lsanglefixed = round(lsangle/60)
         if lsanglefixed == 6:
             lsanglefixed = 0
+        if lslength < lengthminimum:
+            lsanglefixed = 6
         rsanglefixed = round(rsangle/60)
         if rsanglefixed == 6:
             rsanglefixed = 0
     
-    if lslength > lengthminimum and rslength > lengthminimum:
+    if rslength > lengthminimum:
         charid = lsanglefixed * 6 + rsanglefixed
         charname = layout[charid]
+        keypressed = 1
+    else:
+        keypressed = 0
+        #ag.keyUp(charname)
+
+    if keypressed:
+        if not waspressed:
+            ag.press(charname)
+        waspressed = 1
+    else:
+        waspressed = 0
 
     #print(charid)
     print(charname)
