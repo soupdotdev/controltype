@@ -3,6 +3,8 @@ import time
 import math
 import numpy
 
+# meow mrrp :3
+
 gamepadType = gp.Xbox360
 
 gamepad = gamepadType()
